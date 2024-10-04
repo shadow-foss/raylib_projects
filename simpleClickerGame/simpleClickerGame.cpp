@@ -1,7 +1,7 @@
 #include <iostream>
 #include <raylib.h>
 #include <string>
-
+#include <raymath.h>
 
 typedef enum GameScreen { MAINMENU, GAME, WIN } GameScreen; // CREATING AN ALIAS FOR THE ENUM
 
@@ -10,14 +10,14 @@ int WinMain() {
     bool running = true; //  control variable for the main loop
 
     // Score variables
-    int score{ 0 }; 
+    int score{ 0 };
     std::string scoreLabel{ "Score:0" }; // Label to display score
 
     int colour_code = 0; // Index for circle color
 
     // Parameters for the circle
-    int circlePos{ 400 };
-    float circleRadius{ 60 }; 
+    Vector2 circlePos{ 400,400 };
+    float circleRadius{ 60 };
 
     // Array of colors for the circle
     Color circleColors[15] = { PINK, RED, MAROON, ORANGE, GOLD, YELLOW, GREEN, LIME,
@@ -25,8 +25,8 @@ int WinMain() {
 
     // Background color and window size
     Color GAMEBG{ LIGHTGRAY };
-    const int screenHeight{ 800 }; 
-    const int screenWidth{ 800 }; 
+    const int screenHeight{ 800 };
+    const int screenWidth{ 800 };
 
     // Initialize the window
     InitWindow(screenWidth, screenHeight, "SIMPLE CLICKER GAME - RAYLIB");
@@ -41,7 +41,7 @@ int WinMain() {
 
     // Main game loop
     while (running) {
-        // Check for window close button 
+        // Check for window close button
         if (WindowShouldClose() && IsKeyUp(KEY_ESCAPE)) {
             running = false; // Stop the loop
             CloseWindow(); // Close the window
@@ -55,7 +55,7 @@ int WinMain() {
             DrawRectangle(295, 290, 150, 60, VIOLET);  // start button
             DrawText("Start", 310, 300, 45, RAYWHITE); // start game text
             DrawRectangle(295, 430, 150, 60, VIOLET);  // exit button
-            DrawText("EXIT", 315, 440, 45, RAYWHITE); 
+            DrawText("EXIT", 315, 440, 45, RAYWHITE);
 
             // Check for mouse click to start the game
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)
@@ -76,17 +76,22 @@ int WinMain() {
         }
 
         case GAME: {
-            ClearBackground(GAMEBG);                                                   // creates a bg with color from GAMEBG variable
-            DrawCircle(circlePos, circlePos, circleRadius, circleColors[colour_code]); // Draws a circle
-            DrawFPS(700, 20);                                                          // Draws or displays FPS on screen
-            DrawText(scoreLabel.c_str(), 600, 120, 36, YELLOW);                        // Displays score
-            DrawText("SIMPLE CLICKER GAME", 130, 50, 46, RED);                         // Displays a simple title for game
+            //Gets mouse position 
+            Vector2 mousePosition = GetMousePosition();
+            Vector2 toMouseVector = Vector2Subtract(mousePosition, circlePos);
+            float dotVector = toMouseVector.x * toMouseVector.x + toMouseVector.y * toMouseVector.y;
+
+
+            ClearBackground(GAMEBG);                                                       // creates a bg with color from GAMEBG variable
+            DrawCircle(circlePos.x, circlePos.y, circleRadius, circleColors[colour_code]); // Draws a circle
+            DrawFPS(700, 20);                                                              // Draws or displays FPS on screen
+            DrawText(scoreLabel.c_str(), 600, 120, 36, YELLOW);                            // Displays score
+            DrawText("SIMPLE CLICKER GAME", 130, 50, 46, RED);                             // Displays a simple title for game
 
 
             // Check if mouse left button is pressed and if the mouse is inside the circle 
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)
-                && ((circlePos - circleRadius) < GetMouseX() && GetMouseX() < (circlePos + circleRadius))
-                && ((circlePos - circleRadius) < GetMouseY() && GetMouseY() < (circlePos + circleRadius))) {
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && (dotVector <= circleRadius * circleRadius))
+            {
 
                 score += 1;                                      // Increases score
                 scoreLabel = ("Score:" + std::to_string(score)); // Sets a score label
@@ -109,7 +114,7 @@ int WinMain() {
 
         case WIN: {
             ClearBackground(PURPLE);                    // creates a bg with sky blue
-            DrawText("YOU WON", 200, 100, 60, RED);     // Display win message
+            DrawText("YOU WON", 230, 100, 60, RED);     // Display win message
             DrawRectangle(265, 290, 205, 60, BLUE);     // replay button
             DrawText("REPLAY", 280, 300, 45, RAYWHITE); // replay text
             DrawRectangle(295, 430, 150, 60, BLUE);     // exit button
@@ -121,12 +126,12 @@ int WinMain() {
                     && (290 < GetMouseY() && GetMouseY() < 350))) {
 
                 //reseting the game variables to 0 or respective values since its restarting
-                 score = 0;         
-                 scoreLabel = "Score:0";
-                 colour_code = 0;
-                 circleRadius = 60;
+                score = 0;
+                scoreLabel = "Score:0";
+                colour_code = 0;
+                circleRadius = 60;
 
-                 currentScreen = GAME;   // Transition to GAME screen on click
+                currentScreen = GAME;   // Transition to GAME screen on click
             }
 
             // Check for exit button click
