@@ -3,10 +3,10 @@
 #include <string>
 #include <raymath.h>
 
-typedef enum GameScreen { MAINMENU, GAME, WIN } GameScreen; // CREATING AN ALIAS FOR THE ENUM
+typedef enum GameScreen { MAINMENU , GAME , WIN } GameScreen; // CREATING AN ALIAS FOR THE ENUM
 
-int WinMain() {
-
+int main() {
+    Image winicon = LoadImage(R"(D:\Files\Pixel art\asset\2d ball game\Itch_io_cover_img.png)");
     bool running = true; //  control variable for the main loop
 
     // Score variables
@@ -20,7 +20,7 @@ int WinMain() {
     float circleRadius{ 60 };
 
     // Array of colors for the circle
-    Color circleColors[15] = { PINK, RED, MAROON, ORANGE, GOLD, YELLOW, GREEN, LIME,
+    Color circleColors[15] = { PINK, RED , MAROON, ORANGE, GOLD, YELLOW, GREEN, LIME,
                                DARKGREEN, DARKBLUE, BLUE, SKYBLUE, PURPLE, VIOLET, DARKPURPLE };
 
     // Background color and window size
@@ -30,7 +30,7 @@ int WinMain() {
 
     // Initialize the window
     InitWindow(screenWidth, screenHeight, "SIMPLE CLICKER GAME - RAYLIB");
-
+    SetWindowIcon(winicon);
     // Lock the frames per second to 75
     SetTargetFPS(75);
 
@@ -47,7 +47,7 @@ int WinMain() {
             CloseWindow(); // Close the window
         }
         BeginDrawing(); // Start drawing the frame
-
+        
         switch (currentScreen) {
         case MAINMENU: {
             ClearBackground(SKYBLUE);                  // creates a bg with sky blue

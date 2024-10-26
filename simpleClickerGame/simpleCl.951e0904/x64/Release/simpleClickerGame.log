@@ -1,0 +1,10 @@
+﻿  simpleClickerGame.cpp
+D:\github repos\raylib_projects\simpleClickerGame\simpleClickerGame.cpp(86,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\github repos\raylib_projects\simpleClickerGame\simpleClickerGame.cpp(86,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 108 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  simpleClickerGame.vcxproj -> D:\github repos\raylib_projects\simpleClickerGame\x64\Release\simpleClickerGame.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
