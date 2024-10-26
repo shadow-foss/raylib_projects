@@ -6,7 +6,6 @@
 typedef enum GameScreen { MAINMENU , GAME , WIN } GameScreen; // CREATING AN ALIAS FOR THE ENUM
 
 int main() {
-    Image winicon = LoadImage(R"(D:\Files\Pixel art\asset\2d ball game\Itch_io_cover_img.png)");
     bool running = true; //  control variable for the main loop
 
     // Score variables
@@ -30,7 +29,6 @@ int main() {
 
     // Initialize the window
     InitWindow(screenWidth, screenHeight, "SIMPLE CLICKER GAME - RAYLIB");
-    SetWindowIcon(winicon);
     // Lock the frames per second to 75
     SetTargetFPS(75);
 
