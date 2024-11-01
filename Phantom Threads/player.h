@@ -5,11 +5,12 @@ class player {
 private:
     Texture2D texture;
     Vector2 position;
+    Rectangle sprite;
+    int frame;
     float speed;
     float gravity;
     float jumpHeight;
-    short direction; // left = -1, idle = 0, right = 1 
-    Rectangle sprite;
+    int direction; // left = -1, idle = 0, right = 1 
     bool isJumping;
 
 public:
