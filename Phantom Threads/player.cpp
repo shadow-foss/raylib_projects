@@ -2,13 +2,15 @@
 #include "player.h"
 
 //CONSTRUCTOR
-player::player(float x, float y) :position({ x,y }), speed(100.f), direction(0), jumpHeight(50.f), jumpSpeed(150.f), isJumping(false), gravity(50.f), frame(0), animRuntime(0.f), animUpdatetime((float)1.f / 8.f) { sprite = {0,0,32.f,32.f}; }
+player::player(float x, float y) :position({ x,y }), speed(100.f), direction(0), jumpHeight(60.f), jumpSpeed(150.f), isJumping(false), gravity(50.f), frame(0), animRuntime(0.f), animUpdatetime((float)1.f / 8.f), offset({320.f,0.f}), targetpos({position.x,0}) { sprite = {0,0,32.f,32.f}; }
 
 
 //LOAD SPRITE SHEET
 void player::loadSprite() {
 	spritesheet = LoadTexture("data/ghost.png");
 }
+
+//FUNCTION TO SET FLOOR POSITION
 void player::setFloorPos(float Pos) {
 	floorPos = Pos;
 }
@@ -18,7 +20,7 @@ bool player::isOnFloor() {
 	if ((position.y ) >= floorPos) {
 		return true;
 	}
-	else if (position.y < floorPos) {
+	else {
 		return false;
 	}
 	
@@ -98,4 +100,25 @@ void player::drawplayer(){
 }
 Vector2 player::getPosition() const {
 	return position;
+}
+
+//SETTING CAMERA
+void player::setCamera() {
+	playercam.offset = offset;
+	playercam.target = targetpos;
+	playercam.rotation = 0.f;
+	playercam.zoom = 1.f;
+
+}
+//UPDATES THE CAMERA POSITION TO PLAYER POSITION
+void player::updateCamerapos() {
+	targetpos = { position.x,0 };
+	if (targetpos.x < 320) {
+		targetpos = {320,0};
+	}
+	playercam.target = targetpos;
+}
+//RETURNS THE PLAYER CAM TO BE DRAWN IN MAIN
+Camera2D player::getCamera() const {
+	return playercam;
 }
