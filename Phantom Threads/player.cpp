@@ -2,16 +2,26 @@
 #include "player.h"
 
 //CONSTRUCTOR
-player::player(float x, float y) :position({ x,y }), speed(150.f), gravity(9.81f), jumpHeight(50.f), direction(0), isJumping(false), frame(0) { sprite = { 0,0,32.f,32.f }; }
+player::player(float x, float y) :position({ x,y }), speed(100.f), direction(0), jumpHeight(50.f), jumpSpeed(150.f), isJumping(false), gravity(50.f), frame(0), animRuntime(0.f), animUpdatetime((float)1.f / 8.f) { sprite = {0,0,32.f,32.f}; }
+
 
 //LOAD SPRITE SHEET
 void player::loadSprite() {
-	texture = LoadTexture("data/ghost.png");
+	spritesheet = LoadTexture("data/ghost.png");
+}
+void player::setFloorPos(float Pos) {
+	floorPos = Pos;
 }
 
 //TO CHECK IF PLAYER IS COLLIDING WITH FLOOR
 bool player::isOnFloor() {
-	return true;
+	if ((position.y ) >= floorPos) {
+		return true;
+	}
+	else if (position.y < floorPos) {
+		return false;
+	}
+	
 }
 
 //UPDATE POSITION - PLAYER MOVEMENT CODE
@@ -34,36 +44,58 @@ void player::updatePos(float deltaTime) {
 
 	}
 	//JUMPING MECHANISM WIP
-	if ( (IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE)) && !isJumping && isOnFloor()) {
+	if ( (IsKeyDown(KEY_W) || IsKeyDown(KEY_SPACE) || IsKeyDown(KEY_UP)) && !isJumping && isOnFloor()) {
+		initialjumpPos = position.y;
 		isJumping = true;
 	}
 	if (isJumping) {
-		position.y -= jumpHeight * deltaTime;
-		isJumping = false;
+		
+		position.y -= jumpSpeed* deltaTime;
+		if (position.y <= (initialjumpPos - jumpHeight)) {
+			isJumping = false;
+		}
+		
+	}
+	//GRAVITY MECHANISM
+	if (!isOnFloor()&& !isJumping) {
+		position.y += gravity * deltaTime;
 	}
 }
 //FUNCTION TO UPDATE ANIMATIONS
 
-void player::updateAnim() {
+void player::updateAnim(float deltaTime) {
 	//SETS ANIM TO BE PLAYED AS PER STATE OF PLAYER, values of sprite.y idle = 0,movemment = 32,hover/jump =64
+	
+	//MOVE LEFT ANIM
 	if (direction == -1) {
-		sprite.y = 32;
+		sprite.y = 32;     
+		(sprite.width > 0) ? sprite.width *= -1 : sprite.width *= 1;  //FLIPS THE SPRITE 
 	}
+	//MOVE RIGHT ANIM
 	else if (direction == 1) {
 		sprite.y = 32;
+		(sprite.width < 0) ? sprite.width *= -1 : sprite.width *= 1;  //FLIPS THE SPRITE
 	}
+	//IDLE ANIM
 	else if (direction == 0) {
-		sprite.y = 0;
+		sprite.y = 64; 
+	}
+	//ANIM PLAYER
+	animRuntime += deltaTime;
+	if (animRuntime >= animUpdatetime) {
+		animRuntime = 0.f;
+		sprite.x = (float)frame * 32.f;
+		frame ++;
+		if (frame > 5) {
+			frame = 0;
+		}
+
 	}
 }
+
 void player::drawplayer(){
-	DrawTextureRec(texture, sprite, position,WHITE);
+	DrawTextureRec(spritesheet, sprite, position,WHITE);
 }
 Vector2 player::getPosition() const {
 	return position;
 }
-
-
-
-
-
