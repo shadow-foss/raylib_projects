@@ -16,6 +16,7 @@ private:
     bool isJumping;
     float gravity;
     float floorPos;
+    Rectangle playercollision;
     //animation player variables
     short frame;
     float animRuntime;
@@ -32,6 +33,7 @@ public:
     bool isOnFloor();
     void updatePos(float deltaTime);
     void updateAnim(float deltaTime);
+    Rectangle collisionbox();
     void drawplayer();
     Vector2 getPosition() const;
     void setCamera();

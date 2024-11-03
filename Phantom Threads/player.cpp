@@ -2,7 +2,7 @@
 #include "player.h"
 
 //CONSTRUCTOR
-player::player(float x, float y) :position({ x,y }), speed(100.f), direction(0), jumpHeight(60.f), jumpSpeed(150.f), isJumping(false), gravity(50.f), frame(0), animRuntime(0.f), animUpdatetime((float)1.f / 8.f), offset({320.f,0.f}), targetpos({position.x,0}) { sprite = {0,0,32.f,32.f}; }
+player::player(float x, float y) :position({ x,y }), speed(100.f), direction(0), jumpHeight(60.f), jumpSpeed(150.f), isJumping(false), gravity(50.f), frame(0), animRuntime(0.f), animUpdatetime((float)1.f / 8.f), offset({320.f,0.f}), targetpos({position.x,0}) { sprite = {0,0,64.f,64.f}; }
 
 
 //LOAD SPRITE SHEET
@@ -70,29 +70,34 @@ void player::updateAnim(float deltaTime) {
 	
 	//MOVE LEFT ANIM
 	if (direction == -1) {
-		sprite.y = 32;     
+		sprite.y = 64;     
 		(sprite.width > 0) ? sprite.width *= -1 : sprite.width *= 1;  //FLIPS THE SPRITE 
 	}
 	//MOVE RIGHT ANIM
 	else if (direction == 1) {
-		sprite.y = 32;
+		sprite.y = 64;
 		(sprite.width < 0) ? sprite.width *= -1 : sprite.width *= 1;  //FLIPS THE SPRITE
 	}
 	//IDLE ANIM
 	else if (direction == 0) {
-		sprite.y = 64; 
+		sprite.y = 128; 
 	}
 	//ANIM PLAYER
 	animRuntime += deltaTime;
 	if (animRuntime >= animUpdatetime) {
 		animRuntime = 0.f;
-		sprite.x = (float)frame * 32.f;
+		sprite.x = (float)frame * 64.f;
 		frame ++;
 		if (frame > 5) {
 			frame = 0;
 		}
 
 	}
+}
+//PLAYER COLLISIONS
+Rectangle player::collisionbox() {
+	playercollision = { position.x,position.y,64.f,64.f };
+	return playercollision;
 }
 
 void player::drawplayer(){
